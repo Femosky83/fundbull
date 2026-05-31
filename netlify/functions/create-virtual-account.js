@@ -25,7 +25,7 @@ exports.handler = async (event) => {
     firstName: firstName,
     lastName: lastName,
     phone: phone,
-    bank: "PROVIDUS"
+    bank: "9PSB"
   });
 
   return new Promise((resolve) => {
