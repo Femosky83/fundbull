@@ -570,7 +570,8 @@ html,body{height:100%;background:var(--navy);color:var(--white);font-family:var(
 
 <!-- ===== DASHBOARD ===== -->
 <div class="page" id="dashPage">
-  <div class="dash-header">
+  <div style="height:48px;background:var(--navy2);width:100%;"></div>
+  <div class="dash-header" style="padding-top:12px !important;">
     <div class="dash-top">
       <div class="dash-logo-name">
         <div class="dash-logo">
@@ -597,7 +598,7 @@ html,body{height:100%;background:var(--navy);color:var(--white);font-family:var(
     <div class="dash-quick">
       <button class="quick-btn" onclick="showPage('rechargePage')"><span class="quick-icon">💳</span><span class="quick-label">Recharge</span></button>
       <button class="quick-btn" onclick="openWithdrawModal()"><span class="quick-icon">💸</span><span class="quick-label">Withdraw</span></button>
-      <button class="quick-btn" onclick="showPage('teamPage')"><span class="quick-icon">👥</span><span class="quick-label">Referral</span></button>
+      <button class="quick-btn" id="promoterHubBtn" onclick="showPage('promoterPage');loadPromoterDashboard();" style="display:none;"><span class="quick-icon">⭐</span><span class="quick-label">Promo Hub</span></button>
       <button class="quick-btn" onclick="showPage('chartPage')"><span class="quick-icon">📊</span><span class="quick-label">Charts</span></button>
     </div>
   </div>
@@ -809,6 +810,52 @@ html,body{height:100%;background:var(--navy);color:var(--white);font-family:var(
     <button class="full-btn danger-btn" onclick="doLogout()">LOGOUT</button>
   </div>
 </div>
+<!-- ===== PROMOTER DASHBOARD ===== -->
+<div class="page" id="promoterPage">
+  <div style="height:48px;background:var(--navy2);width:100%;"></div>
+  <div style="background:linear-gradient(135deg,#1a1a2e,#2d1b4e);padding:16px;padding-top:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div style="font-family:var(--font-head);font-size:20px;font-weight:900;color:#fff;">⭐ PROMOTER <span style="color:var(--gold);">HUB</span></div>
+      <button onclick="showPage('dashPage')" style="background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:6px 12px;color:#fff;font-size:12px;cursor:pointer;">← Dashboard</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      <div style="background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.2);border-radius:12px;padding:12px;">
+        <div style="font-size:11px;color:var(--muted);">Total Downlines</div>
+        <div style="font-size:22px;font-weight:900;color:var(--green);" id="promTotalDownlines">0</div>
+      </div>
+      <div style="background:rgba(240,192,64,.1);border:1px solid rgba(240,192,64,.2);border-radius:12px;padding:12px;">
+        <div style="font-size:11px;color:var(--muted);">Total Earned</div>
+        <div style="font-size:22px;font-weight:900;color:var(--gold);" id="promTotalEarned">₦0</div>
+      </div>
+      <div style="background:rgba(74,124,247,.1);border:1px solid rgba(74,124,247,.2);border-radius:12px;padding:12px;">
+        <div style="font-size:11px;color:var(--muted);">Bonus Paid</div>
+        <div style="font-size:22px;font-weight:900;color:#4a7cf7;" id="promBonusPaid">₦0</div>
+      </div>
+      <div style="background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.2);border-radius:12px;padding:12px;">
+        <div style="font-size:11px;color:var(--muted);">Unpaid Bonus</div>
+        <div style="font-size:22px;font-weight:900;color:#e84040;" id="promBonusUnpaid">₦0</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:12px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:12px;color:var(--muted);">5% Weekly Bonus Progress</div>
+        <div style="font-size:12px;color:var(--green);" id="promDaysLeft">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:20px;height:8px;overflow:hidden;">
+        <div id="promProgressBar" style="background:linear-gradient(90deg,var(--green),var(--gold));height:100%;border-radius:20px;width:0%;transition:width .5s;"></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:0;background:var(--navy2);border-bottom:1px solid var(--border);">
+    <button class="prom-tab active" id="promTabBtn-downlines" onclick="switchPromTab('downlines',this)" style="flex:1;padding:12px 8px;background:transparent;border:none;border-bottom:2px solid var(--green);color:var(--green);font-size:12px;font-weight:800;cursor:pointer;">👥 Downlines</button>
+    <button class="prom-tab" id="promTabBtn-activity" onclick="switchPromTab('activity',this)" style="flex:1;padding:12px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:12px;font-weight:800;cursor:pointer;">📊 Activity</button>
+    <button class="prom-tab" id="promTabBtn-earnings" onclick="switchPromTab('earnings',this)" style="flex:1;padding:12px 8px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:12px;font-weight:800;cursor:pointer;">💰 Earnings</button>
+  </div>
+  <div id="promTab-downlines" style="padding:16px;"><div id="promDownlinesList"></div></div>
+  <div id="promTab-activity" style="padding:16px;display:none;"><div id="promActivityList"></div></div>
+  <div id="promTab-earnings" style="padding:16px;display:none;"><div id="promEarningsList"></div></div>
+</div>
+
 <div class="page" id="txPage">
   <div style="padding:16px;">
     <button class="page-back" onclick="showPage('profilePage')"><span>←</span> Back</button>
@@ -820,7 +867,7 @@ html,body{height:100%;background:var(--navy);color:var(--white);font-family:var(
 <!-- ===== ADMIN PAGE ===== -->
 <div class="page" id="adminPage">
   <div class="admin-header">
-    <button class="page-back" onclick="showPage('profilePage')"><span>←</span> Back</button>
+    <button class="page-back" onclick="showPage('dashPage')"><span>←</span> Back</button>
     <div style="font-family:var(--font-head);font-size:22px;font-weight:800;">⚙️ Admin Panel</div>
   </div>
 
@@ -895,7 +942,9 @@ html,body{height:100%;background:var(--navy);color:var(--white);font-family:var(
     <div style="font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;margin-bottom:12px;">🏦 Site Settings</div>
     <div class="field-group"><label>Withdrawal Charge (%)</label><input type="number" id="settingsWdrCharge" placeholder="e.g. 15"/></div>
     <div class="field-group"><label>Min Withdrawal (₦)</label><input type="number" id="settingsMinWdr" placeholder="e.g. 500"/></div>
+    <div class="field-group"><label>Min Withdrawal (USDT $)</label><input type="number" id="settingsMinWdrUsdt" placeholder="e.g. 5"/></div>
     <div class="field-group"><label>Registration Bonus (₦)</label><input type="number" id="settingsRegBonus" placeholder="e.g. 500"/></div>
+    <div class="field-group"><label>USDT Wallet Address (BEP20)</label><input type="text" id="settingsUsdtWallet" placeholder="0x..."/></div>
     <button class="full-btn" onclick="saveSiteSettings()">💾 Save Site Settings</button>
   </div>
 
@@ -1341,6 +1390,9 @@ function loadUserData(uid){
     document.getElementById("bottomNav").classList.add("show");
     if(currentUserData.email === ADMIN_EMAIL){
       document.getElementById("adminMenuBtn").style.display = "flex";
+    }
+    if(currentUserData.isPromoter){
+      document.getElementById("promoterHubBtn").style.display = "flex";
     }
     setTimeout(function(){ document.getElementById("featuresOverlay").classList.add("show"); }, 800);
   });
@@ -2380,7 +2432,9 @@ function loadAdminSettings(){
     if(doc.exists){
       document.getElementById("settingsWdrCharge").value = doc.data().withdrawalCharge || 15;
       document.getElementById("settingsMinWdr").value = doc.data().minWithdrawal || 500;
+      document.getElementById("settingsMinWdrUsdt").value = doc.data().minWithdrawalUsdt || 5;
       document.getElementById("settingsRegBonus").value = doc.data().regBonus || 500;
+      document.getElementById("settingsUsdtWallet").value = doc.data().usdtWallet || USDT_WALLET;
     }
   });
 }
@@ -2399,12 +2453,103 @@ function saveAdminSettings(){
 function saveSiteSettings(){
   var charge = parseFloat(document.getElementById("settingsWdrCharge").value)||15;
   var minWdr = parseFloat(document.getElementById("settingsMinWdr").value)||500;
+  var minWdrUsdt = parseFloat(document.getElementById("settingsMinWdrUsdt").value)||5;
   var regBonus = parseFloat(document.getElementById("settingsRegBonus").value)||500;
-  db.collection("settings").doc("site").set({ withdrawalCharge:charge, minWithdrawal:minWdr, regBonus:regBonus }).then(function(){
+  var usdtWallet = document.getElementById("settingsUsdtWallet").value.trim();
+  db.collection("settings").doc("site").set({ withdrawalCharge:charge, minWithdrawal:minWdr, minWithdrawalUsdt:minWdrUsdt, regBonus:regBonus, usdtWallet:usdtWallet }).then(function(){
+    if(usdtWallet) USDT_WALLET = usdtWallet;
     showToast("Site settings saved ✅","success");
   });
 }
 
+
+// ===== PROMOTER DASHBOARD =====
+function switchPromTab(tab, btn){
+  document.querySelectorAll(".prom-tab").forEach(function(t){
+    t.style.borderBottom = "2px solid transparent";
+    t.style.color = "var(--muted)";
+  });
+  btn.style.borderBottom = "2px solid var(--green)";
+  btn.style.color = "var(--green)";
+  ["downlines","activity","earnings"].forEach(function(t){
+    document.getElementById("promTab-"+t).style.display = t===tab?"block":"none";
+  });
+}
+
+function loadPromoterDashboard(){
+  if(!currentUser || !currentUserData) return;
+  var uid = currentUser.uid;
+  var bonusPaid = currentUserData.promoterBonusPaid||0;
+  var totalEarned = currentUserData.totalEarned||0;
+  var unpaid = Math.max(0, totalEarned - bonusPaid);
+  document.getElementById("promTotalEarned").textContent = "₦"+fmt(totalEarned);
+  document.getElementById("promBonusPaid").textContent = "₦"+fmt(bonusPaid);
+  document.getElementById("promBonusUnpaid").textContent = "₦"+fmt(unpaid);
+  var joinDate = currentUserData.createdAt ? new Date(currentUserData.createdAt.seconds*1000) : new Date();
+  var now = new Date();
+  var daysSince = Math.floor((now-joinDate)/(1000*60*60*24));
+  var cycleDay = daysSince%5;
+  document.getElementById("promProgressBar").style.width = ((cycleDay/5)*100)+"%";
+  document.getElementById("promDaysLeft").textContent = (5-cycleDay)+" days to next bonus";
+
+  // Downlines
+  db.collection("users").where("refBy","==",uid).get().then(function(snap){
+    document.getElementById("promTotalDownlines").textContent = snap.size;
+    if(snap.empty){ document.getElementById("promDownlinesList").innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">No downlines yet</div></div>'; return; }
+    var html = '<div style="font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;margin-bottom:10px;">Generation 1 Downlines</div>';
+    snap.forEach(function(d){
+      var m = d.data();
+      var regDate = m.createdAt ? new Date(m.createdAt.seconds*1000).toLocaleDateString() : "—";
+      html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+      html += '<div><div style="font-size:14px;font-weight:800;color:#fff;">'+m.name+'</div><div style="font-size:11px;color:var(--muted);">'+m.phone+'</div></div>';
+      html += '<div style="text-align:right;"><div style="font-size:14px;font-weight:800;color:var(--green);">₦'+fmt(m.balance||0)+'</div></div>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:var(--muted);">📅 Joined: '+regDate+' · 💰 Earned: ₦'+fmt(m.totalEarned||0)+'</div>';
+      html += '</div>';
+    });
+    document.getElementById("promDownlinesList").innerHTML = html;
+  });
+
+  // Activity
+  db.collection("users").where("refBy","==",uid).get().then(function(downSnap){
+    var uids = [];
+    downSnap.forEach(function(d){ uids.push(d.id); });
+    if(!uids.length){ document.getElementById("promActivityList").innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-text">No activity yet</div></div>'; return; }
+    db.collection("deposits").where("status","==","approved").get().then(function(snap){
+      var acts = [];
+      snap.forEach(function(d){ if(uids.indexOf(d.data().uid)!==-1) acts.push(d.data()); });
+      acts.sort(function(a,b){ return (b.createdAt?b.createdAt.seconds:0)-(a.createdAt?a.createdAt.seconds:0); });
+      if(!acts.length){ document.getElementById("promActivityList").innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-text">No recharge activity yet</div></div>'; return; }
+      var html = '';
+      acts.forEach(function(a){
+        var amtStr = a.currency==="NGN"?"₦"+fmt(a.amount):"$"+a.amount;
+        var myBonus = a.currency==="NGN"?"₦"+fmt(a.amount*0.10):"$"+(a.amount*0.10).toFixed(2);
+        html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;">';
+        html += '<div><div style="font-size:13px;font-weight:700;color:#fff;">'+a.name+'</div><div style="font-size:11px;color:var(--muted);">'+a.planName+' · '+fmtDate(a.createdAt)+'</div></div>';
+        html += '<div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:var(--green);">'+amtStr+'</div><div style="font-size:11px;color:var(--gold);">+'+myBonus+'</div></div>';
+        html += '</div>';
+      });
+      document.getElementById("promActivityList").innerHTML = html;
+    });
+  });
+
+  // Earnings
+  db.collection("transactions").where("uid","==",uid).where("type","==","credit").get().then(function(snap){
+    if(snap.empty){ document.getElementById("promEarningsList").innerHTML = '<div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">No earnings yet</div></div>'; return; }
+    var txs = [];
+    snap.forEach(function(d){ txs.push(d.data()); });
+    txs.sort(function(a,b){ return (b.createdAt?b.createdAt.seconds:0)-(a.createdAt?a.createdAt.seconds:0); });
+    var html = '';
+    txs.forEach(function(tx){
+      html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">';
+      html += '<div><div style="font-size:13px;font-weight:700;color:#fff;">'+tx.desc+'</div><div style="font-size:11px;color:var(--muted);">'+fmtDate(tx.createdAt)+'</div></div>';
+      html += '<div style="font-size:14px;font-weight:800;color:var(--green);">+'+(tx.currency==="USDT"?"$":"₦")+fmt(tx.amount||0)+'</div>';
+      html += '</div>';
+    });
+    document.getElementById("promEarningsList").innerHTML = html;
+  });
+}
 
 function fmt(n){
   return Number(n||0).toLocaleString("en-NG",{minimumFractionDigits:0,maximumFractionDigits:2});
